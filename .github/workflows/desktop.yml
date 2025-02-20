@@ -1,36 +1,32 @@
-import os
-import time
-import requests
-from pywinauto import Application
-from pywinauto.findwindows import ElementNotFoundError
-from PIL import ImageGrab
+name: Windows UI Test with Pywinauto (Chrome)
 
-chrome_installer = "chrome_installer.exe"
-chrome_url = "https://dl.google.com/chrome/install/latest/chrome_installer.exe"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
-if not os.path.exists(chrome_installer):
-    response = requests.get(chrome_url, stream=True)
-    with open(chrome_installer, "wb") as file:
-        for chunk in response.iter_content(chunk_size=1024):
-            file.write(chunk)
+jobs:
+  ui-test:
+    runs-on: windows-latest
 
-os.system(f"{chrome_installer} /silent /install")
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-time.sleep(10)
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-app = Application().start(chrome_path)
+      - name: Install Dependencies
+        run: pip install pywinauto pillow requests
 
-time.sleep(3)
+      - name: Run Windows UI Test
+        run: python test_chrome_ui.py
 
-try:
-    window = app.window(title_re=".*Google Chrome.*")
-    window.wait("ready", timeout=10)
-    print("Chrome UI loaded successfully")
-except ElementNotFoundError:
-    print("Chrome UI not found")
-    exit(1)
-
-ImageGrab.grab().save("screenshot.png")
-
-app.kill()
+      - name: Upload Screenshot as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-ui-screenshot
+          path: screenshot.png
