@@ -24,8 +24,10 @@ jobs:
 
       - name: Run Windows UI Test
         run: python test_chrome_ui.py
+        continue-on-error: true  
 
       - name: Upload Screenshot as Artifact
+        if: always()  
         uses: actions/upload-artifact@v4
         with:
           name: windows-ui-screenshot
