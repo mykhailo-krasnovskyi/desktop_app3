@@ -1,0 +1,32 @@
+name: Windows UI Test with Pywinauto (Chrome)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  ui-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install pywinauto pillow requests
+
+      - name: Run Windows UI Test
+        run: python test_chrome_ui.py
+
+      - name: Upload Screenshot as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-ui-screenshot
+          path: screenshot.png
