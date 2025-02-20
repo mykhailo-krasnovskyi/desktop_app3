@@ -27,11 +27,15 @@ try:
     window = app.window(title_re=".*Google Chrome.*")
     window.wait("ready", timeout=10)
     print("Chrome UI loaded successfully")
+
+    screenshot_before = os.path.join(os.getcwd(), "screenshot_before_check.png")
+    ImageGrab.grab().save(screenshot_before)
+    if os.path.exists(screenshot_before):
+        print(f"Screenshot before check saved at {screenshot_before}")
+    else:
+        print("ERROR: Screenshot before check was not created!")
+
     time.sleep(5)
-
-    ImageGrab.grab().save("screenshot_before_check.png")
-    print("Screenshot taken before UI check")
-
 
     omnibox = window.child_window(title="Address and search bar", control_type="Edit")
     if omnibox.exists():
@@ -44,8 +48,11 @@ except ElementNotFoundError:
     print("Chrome UI not found")
     exit(1)
 
-# Делаем финальный скриншот после проверки UI
-ImageGrab.grab().save("screenshot.png")
-print("Final screenshot taken")
+screenshot_after = os.path.join(os.getcwd(), "screenshot.png")
+ImageGrab.grab().save(screenshot_after)
+if os.path.exists(screenshot_after):
+    print(f"Final screenshot saved at {screenshot_after}")
+else:
+    print("ERROR: Final screenshot was not created!")
 
 app.kill()
