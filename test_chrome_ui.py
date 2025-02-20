@@ -26,9 +26,9 @@ time.sleep(3)
 try:
     window = app.window(title_re=".*Google Chrome.*")
     window.wait("ready", timeout=10)
-    print("✅ Chrome UI loaded successfully!")
+    print("Chrome UI loaded successfully")
 except ElementNotFoundError:
-    print("❌ Chrome UI not found!")
+    print("Chrome UI not found")
     exit(1)
 
 ImageGrab.grab().save("screenshot.png")
