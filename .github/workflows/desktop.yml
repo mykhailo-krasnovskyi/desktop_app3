@@ -24,11 +24,17 @@ jobs:
 
       - name: Run Windows UI Test
         run: python test_chrome_ui.py
-        continue-on-error: true  
+        continue-on-error: true
 
-      - name: Upload Screenshot as Artifact
-        if: always()  
+      - name: List files in workspace
+        if: always()
+        run: ls -R
+
+      - name: Upload Screenshots as Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: windows-ui-screenshot
-          path: screenshot.png
+          name: windows-ui-screenshots
+          path: |
+            screenshot_before_check.png
+            screenshot.png
