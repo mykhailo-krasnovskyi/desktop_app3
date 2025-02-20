@@ -27,6 +27,15 @@ try:
     window = app.window(title_re=".*Google Chrome.*")
     window.wait("ready", timeout=10)
     print("Chrome UI loaded successfully")
+
+    # Проверяем наличие адресной строки (Omnibox)
+    omnibox = window.child_window(title="Address and search bar", control_type="Edit")
+    if omnibox.exists():
+        print("Address bar found")
+    else:
+        print("Address bar NOT found")
+        exit(1)
+
 except ElementNotFoundError:
     print("Chrome UI not found")
     exit(1)
