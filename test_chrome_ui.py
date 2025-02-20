@@ -27,8 +27,12 @@ try:
     window = app.window(title_re=".*Google Chrome.*")
     window.wait("ready", timeout=10)
     print("Chrome UI loaded successfully")
+    time.sleep(5)
 
-    # Проверяем наличие адресной строки (Omnibox)
+    ImageGrab.grab().save("screenshot_before_check.png")
+    print("Screenshot taken before UI check")
+
+
     omnibox = window.child_window(title="Address and search bar", control_type="Edit")
     if omnibox.exists():
         print("Address bar found")
@@ -40,6 +44,8 @@ except ElementNotFoundError:
     print("Chrome UI not found")
     exit(1)
 
+# Делаем финальный скриншот после проверки UI
 ImageGrab.grab().save("screenshot.png")
+print("Final screenshot taken")
 
 app.kill()
